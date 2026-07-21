@@ -1,20 +1,20 @@
 {
-  "benchmark_version": "1.2.0",
+  "benchmark_version": "1.3.0",
   "sampling_seed": 20260721,
   "model_inputs": 500,
   "unique_base_prompts": 300,
   "files": {
     "harmful_recognition/data.jsonl": {
       "records": 300,
-      "sha256": "c777606dfe6dcb6f6ec6c9e3ff6f716ab693c0a4352e794a2f85c62809c886db"
+      "sha256": "40bd42f1d24f90b3a5bc40848c5d4e49583439e3cce08da26c99e5087e97ba34"
     },
     "harmful_recognition/base_prompts.jsonl": {
       "records": 100,
-      "sha256": "97b2b504ffde5c3cd15bc12e93851256d846eca29f2ac14a5bf1f9591624fff8"
+      "sha256": "705e399c37a8e329365964db369597d214a498b5df98cfdd6ce43a5cef41892a"
     },
     "refusal/data.jsonl": {
       "records": 100,
-      "sha256": "30604944891fff39c39f4f8f2c340a2da6cd8c414b251a1970a87a3ce0c361dc"
+      "sha256": "710ae119f6110760346c4b8a926daf535391ff00f3a66b384e8ae1213326bcd3"
     },
     "refusal/judge_prompt.txt": {
       "records": null,
@@ -22,7 +22,7 @@
     },
     "harmful_generation/data.jsonl": {
       "records": 100,
-      "sha256": "6c5ae3ea32e5afd4026dc79fcbb950ba49b626e845d216edbd9c226d72752132"
+      "sha256": "aa52fd7a925dfc1807ed212509e3f4202924fa51cc5fdf8ae44cd21a51628a66"
     },
     "harmful_generation/judge_prompt.txt": {
       "records": null,

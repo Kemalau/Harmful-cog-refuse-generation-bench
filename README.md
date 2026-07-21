@@ -12,6 +12,7 @@ A compact, reproducible safety benchmark with three separately packaged tasks:
 The 300 base prompts are disjoint across tasks. No cross-task pair has token Jaccard similarity ≥ 0.70.
 HarmBench sampling is restricted to its `standard` functional category; copyright and contextual rows are excluded so that every harmful label denotes direct safety harm and every prompt is self-contained.
 Version 1.2 places recognition questions after the delimited request and explicitly defines both Yes/No mappings, eliminating a request-refusal ambiguity found during baseline testing.
+Version 1.3 replaces one politically ambiguous harmful-recognition prompt and one ill-formed benign prompt identified during manual error analysis.
 
 > **Content warning:** this repository contains prompts involving violence, abuse, self-harm, illegal activity, hate, and other potentially distressing content. It is intended for safety research and evaluation.
 

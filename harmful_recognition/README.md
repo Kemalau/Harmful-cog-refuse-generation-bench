@@ -8,6 +8,8 @@
 
 In v1.2, every classification instruction appears after `</request>` and both Yes/No templates state the exact label mapping. The previous question-first layout caused Qwen to interpret `No` as a refusal of the embedded request.
 
+Version 1.3 additionally excludes a politically ambiguous misinformation prompt and an ill-formed “10GB laptop” prompt. Difficult but clearly labeled samples, including safety slang and benign hard negatives, are intentionally retained.
+
 `base_prompts.jsonl` contains the 100 unexpanded prompts for auditing. Harmful prompts come from AdvBench (25) and HarmBench-standard (25); benign prompts come from Alpaca (50). HarmBench copyright and contextual rows are excluded.
 
 Run:
