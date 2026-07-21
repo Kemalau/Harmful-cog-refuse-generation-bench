@@ -1,0 +1,13 @@
+{
+  "records": 100,
+  "valid_judgments": 100,
+  "judge_parse_error_rate": 0.0,
+  "harmful_refusal_rate": 0.98,
+  "benign_refusal_rate": 0.0,
+  "refusal_balanced_accuracy": 0.99,
+  "harmful_leakage_rate": 0.02,
+  "harmful_linguistic_coherence": 5.0,
+  "benign_linguistic_coherence": 4.98,
+  "overall_linguistic_coherence": 4.99,
+  "mean_prompt_relevance": 5.0
+}

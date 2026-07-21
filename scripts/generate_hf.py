@@ -26,6 +26,7 @@ def parse_args():
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--top-p", type=float, default=1.0)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--batch-size", type=int, default=8)
     parser.add_argument("--trust-remote-code", action="store_true")
     return parser.parse_args()
 
@@ -33,7 +34,7 @@ def parse_args():
 def main():
     args = parse_args()
     import torch
-    from hf_utils import generate_text, load_model, render_chat
+    from hf_utils import generate_texts, load_model, render_chat
 
     random.seed(args.seed)
     torch.manual_seed(args.seed)
@@ -42,35 +43,40 @@ def main():
     rows = read_jsonl(data_path)
     model, tokenizer = load_model(args.model, args.trust_remote_code)
     results = []
-    for index, row in enumerate(rows, start=1):
-        user_text = row["evaluation_prompt"] if args.task == "recognition" else row["prompt"]
-        if args.task == "generation":
-            messages = [
-                {"role": "user", "content": user_text},
-                {"role": "assistant", "content": row["assistant_prefill"]},
-            ]
-            rendered = render_chat(tokenizer, messages, continue_final_message=True)
-        else:
-            rendered = render_chat(tokenizer, [{"role": "user", "content": user_text}])
-        response = generate_text(
-            model, tokenizer, rendered, max_new_tokens, args.temperature, args.top_p
+    for start in range(0, len(rows), args.batch_size):
+        batch = rows[start:start + args.batch_size]
+        rendered_batch = []
+        for row in batch:
+            user_text = row["evaluation_prompt"] if args.task == "recognition" else row["prompt"]
+            if args.task == "generation":
+                messages = [
+                    {"role": "user", "content": user_text},
+                    {"role": "assistant", "content": row["assistant_prefill"]},
+                ]
+                rendered = render_chat(tokenizer, messages, continue_final_message=True)
+            else:
+                rendered = render_chat(tokenizer, [{"role": "user", "content": user_text}])
+            rendered_batch.append(rendered)
+        responses = generate_texts(
+            model, tokenizer, rendered_batch, max_new_tokens, args.temperature, args.top_p
         )
-        result = dict(row)
-        result.update(
-            response=response,
-            full_response=(row.get("assistant_prefill", "") + response),
-            model=args.model,
-            generation_config={
-                "max_new_tokens": max_new_tokens,
-                "temperature": args.temperature,
-                "top_p": args.top_p,
-                "seed": args.seed,
-            },
-        )
-        results.append(result)
-        if index % 25 == 0 or index == len(rows):
-            print(f"generated {index}/{len(rows)}")
-            write_jsonl(args.output, results)
+        for row, response in zip(batch, responses):
+            result = dict(row)
+            result.update(
+                response=response,
+                full_response=(row.get("assistant_prefill", "") + response),
+                model=args.model,
+                generation_config={
+                    "max_new_tokens": max_new_tokens,
+                    "temperature": args.temperature,
+                    "top_p": args.top_p,
+                    "seed": args.seed,
+                    "batch_size": args.batch_size,
+                },
+            )
+            results.append(result)
+        print(f"generated {len(results)}/{len(rows)}")
+        write_jsonl(args.output, results)
 
 
 if __name__ == "__main__":

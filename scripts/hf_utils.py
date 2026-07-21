@@ -45,15 +45,16 @@ def render_chat(tokenizer, messages: list[dict], continue_final_message: bool = 
 
 
 @torch.inference_mode()
-def generate_text(
+def generate_texts(
     model,
     tokenizer,
-    rendered_prompt: str,
+    rendered_prompts: list[str],
     max_new_tokens: int,
     temperature: float,
     top_p: float,
-) -> str:
-    inputs = tokenizer(rendered_prompt, return_tensors="pt")
+) -> list[str]:
+    tokenizer.padding_side = "left"
+    inputs = tokenizer(rendered_prompts, return_tensors="pt", padding=True)
     device = model.get_input_embeddings().weight.device
     inputs = {key: value.to(device) for key, value in inputs.items()}
     kwargs = {
@@ -65,5 +66,18 @@ def generate_text(
     if temperature > 0:
         kwargs.update(temperature=temperature, top_p=top_p)
     output = model.generate(**inputs, **kwargs)
-    continuation = output[0, inputs["input_ids"].shape[1]:]
-    return tokenizer.decode(continuation, skip_special_tokens=True).strip()
+    continuations = output[:, inputs["input_ids"].shape[1]:]
+    return [text.strip() for text in tokenizer.batch_decode(continuations, skip_special_tokens=True)]
+
+
+def generate_text(
+    model,
+    tokenizer,
+    rendered_prompt: str,
+    max_new_tokens: int,
+    temperature: float,
+    top_p: float,
+) -> str:
+    return generate_texts(
+        model, tokenizer, [rendered_prompt], max_new_tokens, temperature, top_p
+    )[0]

@@ -1,6 +1,6 @@
 # Refusal
 
-`data.jsonl` contains 100 prompts: 25 AdvBench harmful, 25 HarmBench harmful, and 50 Alpaca benign. Generate normally without an assistant prefill.
+`data.jsonl` contains 100 prompts: 25 AdvBench harmful, 25 HarmBench-standard harmful, and 50 Alpaca benign. HarmBench copyright/contextual rows are excluded. Generate normally without an assistant prefill.
 
 `judge_prompt.txt` evaluates refusal, harmful actionable-information leakage, linguistic coherence, and prompt relevance. It is adapted from Appendix K.1 of arXiv:2605.08513.
 

@@ -1,0 +1,33 @@
+{
+  "records": 300,
+  "base_prompts": 100,
+  "accuracy": 0.6833333333333333,
+  "invalid_rate": 0.0,
+  "three_template_consistency_accuracy": 0.05,
+  "per_template": {
+    "harm_yes_no": {
+      "count": 100,
+      "accuracy": 0.54,
+      "invalid_rate": 0.0,
+      "harmful_recall": 0.08,
+      "benign_recall": 1.0,
+      "balanced_accuracy": 0.54
+    },
+    "safe_harmful_label": {
+      "count": 100,
+      "accuracy": 1.0,
+      "invalid_rate": 0.0,
+      "harmful_recall": 1.0,
+      "benign_recall": 1.0,
+      "balanced_accuracy": 1.0
+    },
+    "safe_yes_no": {
+      "count": 100,
+      "accuracy": 0.51,
+      "invalid_rate": 0.0,
+      "harmful_recall": 1.0,
+      "benign_recall": 0.02,
+      "balanced_accuracy": 0.51
+    }
+  }
+}

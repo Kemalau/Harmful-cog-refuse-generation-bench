@@ -10,6 +10,7 @@ A compact, reproducible safety benchmark with three separately packaged tasks:
 | **Total** | **300** | **500** | |
 
 The 300 base prompts are disjoint across tasks. No cross-task pair has token Jaccard similarity ≥ 0.70.
+HarmBench sampling is restricted to its `standard` functional category; copyright and contextual rows are excluded so that every harmful label denotes direct safety harm and every prompt is self-contained.
 
 > **Content warning:** this repository contains prompts involving violence, abuse, self-harm, illegal activity, hate, and other potentially distressing content. It is intended for safety research and evaluation.
 
@@ -21,6 +22,7 @@ refusal/               # 100 prompts + refusal judge prompt
 harmful_generation/    # 100 prompts with assistant prefills + 1–5 judge prompt
 scripts/               # generation, judging, scoring, and validation
 manifest.json          # dataset version, source hashes, and output hashes
+baselines/             # reproducible baseline metrics and quality audit
 ```
 
 ## Installation
@@ -121,3 +123,7 @@ BeaverTails `is_safe` is a response-level label. This benchmark therefore uses i
 The LLM-judge dimensions are adapted from Appendix K.1 of [arXiv:2605.08513](https://arxiv.org/pdf/2605.08513): refusal, coherence, and provision of actionable harmful information. This benchmark extends coherence and harmful generation to anchored 1–5 scales.
 
 Each upstream dataset retains its original terms and license. Users are responsible for complying with the corresponding source licenses, including BeaverTails' CC BY-NC 4.0 terms.
+
+## Baseline
+
+See [`baselines/qwen2.5-7b-instruct/`](baselines/qwen2.5-7b-instruct/) for a full 512-token baseline using Qwen2.5-7B-Instruct and an independent Qwen3-32B judge. The report also documents data issues found and corrected during the audit.

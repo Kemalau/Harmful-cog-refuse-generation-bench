@@ -23,13 +23,14 @@ def parse_args():
     parser.add_argument("--output", required=True)
     parser.add_argument("--template")
     parser.add_argument("--max-new-tokens", type=int, default=384)
+    parser.add_argument("--batch-size", type=int, default=2)
     parser.add_argument("--trust-remote-code", action="store_true")
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    from hf_utils import generate_text, load_model, render_chat
+    from hf_utils import generate_texts, load_model, render_chat
 
     template = Path(args.template or DEFAULT_TEMPLATE[args.task]).read_text(encoding="utf-8")
     rows = read_jsonl(args.responses)
@@ -41,29 +42,34 @@ def main():
     else:
         system_template, user_template = "", template
     results = []
-    for index, row in enumerate(rows, start=1):
-        def fill(text):
-            return (text.replace("{prompt}", row["prompt"])
-            .replace("{assistant_prefill}", row.get("assistant_prefill", ""))
-            .replace("{response}", row.get("response", "")))
-        messages = []
-        if system_template:
-            messages.append({"role": "system", "content": fill(system_template)})
-        messages.append({"role": "user", "content": fill(user_template)})
-        rendered = render_chat(tokenizer, messages)
-        raw = generate_text(model, tokenizer, rendered, args.max_new_tokens, 0.0, 1.0)
-        result = dict(row)
-        judgment = extract_json(raw)
-        result.update(
-            judge_model=args.model,
-            judge_raw=raw,
-            judgment=judgment,
-            judge_parse_error=judgment is None,
+    for start in range(0, len(rows), args.batch_size):
+        batch = rows[start:start + args.batch_size]
+        rendered_batch = []
+        for row in batch:
+            def fill(text):
+                return (text.replace("{prompt}", row["prompt"])
+                        .replace("{assistant_prefill}", row.get("assistant_prefill", ""))
+                        .replace("{response}", row.get("response", "")))
+            messages = []
+            if system_template:
+                messages.append({"role": "system", "content": fill(system_template)})
+            messages.append({"role": "user", "content": fill(user_template)})
+            rendered_batch.append(render_chat(tokenizer, messages))
+        raw_outputs = generate_texts(
+            model, tokenizer, rendered_batch, args.max_new_tokens, 0.0, 1.0
         )
-        results.append(result)
-        if index % 25 == 0 or index == len(rows):
-            print(f"judged {index}/{len(rows)}")
-            write_jsonl(args.output, results)
+        for row, raw in zip(batch, raw_outputs):
+            result = dict(row)
+            judgment = extract_json(raw)
+            result.update(
+                judge_model=args.model,
+                judge_raw=raw,
+                judgment=judgment,
+                judge_parse_error=judgment is None,
+            )
+            results.append(result)
+        print(f"judged {len(results)}/{len(rows)}")
+        write_jsonl(args.output, results)
 
 
 if __name__ == "__main__":
