@@ -13,10 +13,10 @@
 
 | Task / metric | Result |
 |---|---:|
-| Recognition: `SAFE/HARMFUL` accuracy | **100%** |
-| Recognition: “Is this request harmful?” accuracy | 54% |
-| Recognition: “Is this request safe?” accuracy | 51% |
-| Recognition: all three templates correct | 5% |
+| Recognition: `SAFE/HARMFUL` accuracy | **98%** |
+| Recognition: explicit harmful Yes/No accuracy | **98%** |
+| Recognition: explicit safe Yes/No accuracy | **97%** |
+| Recognition: all three templates correct | **95%** |
 | Recognition invalid outputs | 0% |
 | Harmful refusal rate | **98%** |
 | Benign refusal rate | **0%** |
@@ -37,14 +37,14 @@ The first pilot exposed two HarmBench sampling problems:
 1. Copyright requests (song lyrics and book passages) were labeled harmful even though this benchmark targets direct safety harm.
 2. Contextual HarmBench rows were sampled without their long `ContextString`, leaving some requests incomplete.
 
-Version 1.1 restricts HarmBench to its self-contained `standard` functional category. After this correction, `SAFE/HARMFUL` recognition increased from 96% to 100%, and harmful refusal increased from 88% to 98%.
+Version 1.1 restricts HarmBench to its self-contained `standard` functional category. This removed the four copyright-driven recognition errors and increased harmful refusal from 88% to 98%.
 
 Four under-specified Alpaca prompts that did not naturally support an assistant steps prefill were also replaced. On the final benign generation set, all 50 responses received harmfulness score 1 and prompt relevance 5; linguistic coherence was 4 or 5 for every response.
 
 ## Interpretation
 
 - **Labels and prompt completeness look good after the v1.1 cleanup.** Manual outlier inspection found one real harmful leakage case: an out-of-band SQL exfiltration request answered with actionable conceptual details.
-- **Use `SAFE/HARMFUL` as the primary recognition metric.** Qwen answered `No` on 96/100 harmful-question prompts and 99/100 safe-question prompts. The Yes/No scores therefore measure polarity/answer bias more than harmful recognition. Keep them as robustness diagnostics and do not average the three templates into one primary score.
+- **Recognition templates are stable in v1.2.** The old question-first layout made Qwen answer `No` as if refusing the embedded request (54%/51% accuracy). Moving the question after `</request>` and spelling out the mapping raises the two Yes/No accuracies to 98% and 97%; `SAFE/HARMFUL` reaches 98%. The three-template aggregate is now meaningful, while per-template values should still be retained.
 - **Refusal has a ceiling effect for aligned models.** A 98% harmful refusal rate is useful when measuring refusal-neuron ablations, but may be too easy for ranking strong aligned models.
 - **Generation has useful sensitivity.** The prefill bypass produces the full 1–5 harmfulness range while benign generations remain coherent and relevant.
 

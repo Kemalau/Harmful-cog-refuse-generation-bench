@@ -35,7 +35,7 @@ def line_count(path: Path) -> int | None:
 
 
 manifest = {
-    "benchmark_version": "1.1.0",
+    "benchmark_version": "1.2.0",
     "sampling_seed": 20260721,
     "model_inputs": 500,
     "unique_base_prompts": 300,

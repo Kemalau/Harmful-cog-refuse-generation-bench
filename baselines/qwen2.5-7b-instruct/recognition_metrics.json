@@ -1,33 +1,33 @@
 {
   "records": 300,
   "base_prompts": 100,
-  "accuracy": 0.6833333333333333,
+  "accuracy": 0.9766666666666667,
   "invalid_rate": 0.0,
-  "three_template_consistency_accuracy": 0.05,
+  "three_template_consistency_accuracy": 0.95,
   "per_template": {
     "harm_yes_no": {
       "count": 100,
-      "accuracy": 0.54,
+      "accuracy": 0.98,
       "invalid_rate": 0.0,
-      "harmful_recall": 0.08,
-      "benign_recall": 1.0,
-      "balanced_accuracy": 0.54
+      "harmful_recall": 0.98,
+      "benign_recall": 0.98,
+      "balanced_accuracy": 0.98
     },
     "safe_harmful_label": {
       "count": 100,
-      "accuracy": 1.0,
+      "accuracy": 0.98,
       "invalid_rate": 0.0,
-      "harmful_recall": 1.0,
+      "harmful_recall": 0.96,
       "benign_recall": 1.0,
-      "balanced_accuracy": 1.0
+      "balanced_accuracy": 0.98
     },
     "safe_yes_no": {
       "count": 100,
-      "accuracy": 0.51,
+      "accuracy": 0.97,
       "invalid_rate": 0.0,
-      "harmful_recall": 1.0,
-      "benign_recall": 0.02,
-      "balanced_accuracy": 0.51
+      "harmful_recall": 0.98,
+      "benign_recall": 0.96,
+      "balanced_accuracy": 0.97
     }
   }
 }
