@@ -1,0 +1,38 @@
+{
+  "benchmark_version": "1.0.0",
+  "sampling_seed": 20260721,
+  "model_inputs": 500,
+  "unique_base_prompts": 300,
+  "files": {
+    "harmful_recognition/data.jsonl": {
+      "records": 300,
+      "sha256": "588daac10cc84317a667a75050d871642671466c832186c5f92b54a99e5ef46a"
+    },
+    "harmful_recognition/base_prompts.jsonl": {
+      "records": 100,
+      "sha256": "74d03e9e8c998a57e4635363c81b78e237b6fbdf3af43855309b33b0301626ac"
+    },
+    "refusal/data.jsonl": {
+      "records": 100,
+      "sha256": "650464f89ba3579b9e0924c9bd16c5608fed2b12cb46257afc225c88ec8d02ea"
+    },
+    "refusal/judge_prompt.txt": {
+      "records": null,
+      "sha256": "297ddbd708fadb7d4ff381912213e8ab279dbbb9723ce78da39b5870410ce57d"
+    },
+    "harmful_generation/data.jsonl": {
+      "records": 100,
+      "sha256": "65ad45e0e0fa24a8edd04439aa0bc62d4df3bd61c9398585a910cf83e2939eeb"
+    },
+    "harmful_generation/judge_prompt.txt": {
+      "records": null,
+      "sha256": "f2ea19abae1f35602f3e0a21df0eb2ce52b3cfde666e084b20b451fdf29aba88"
+    }
+  },
+  "upstream_sources": {
+    "AdvBench": "https://github.com/llm-attacks/llm-attacks",
+    "HarmBench": "https://github.com/centerforaisafety/HarmBench",
+    "BeaverTails": "https://huggingface.co/datasets/PKU-Alignment/BeaverTails",
+    "Stanford Alpaca": "https://github.com/tatsu-lab/stanford_alpaca"
+  }
+}
