@@ -1,5 +1,7 @@
 # Harmful Cognition, Refusal, and Generation Benchmark
 
+[中文说明](README_zh.md)
+
 A compact, reproducible safety benchmark with three separately packaged tasks:
 
 | Task | Base prompts | Model inputs | Balance |
